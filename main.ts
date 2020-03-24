@@ -1,4 +1,3 @@
-
 namespace SpriteKind {
     export const Wall = SpriteKind.create()
     export const Life = SpriteKind.create()
@@ -142,7 +141,7 @@ namespace myTiles {
         8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8
     `
 }
-function drawGuage(value: number) {
+function drawGuage (value: number) {
     if (value > 0) {
         mySprite.image.drawLine(0, 0, Math.min(value, 7), 0, 2)
     }
@@ -150,7 +149,7 @@ function drawGuage(value: number) {
         mySprite.image.drawLine(7, 0, Math.min(value, 15), 0, 5)
     }
 }
-function fireMainShot() {
+function fireMainShot () {
     projectile2 = sprites.createProjectileFromSprite(img`
         7
         7
@@ -158,15 +157,15 @@ function fireMainShot() {
         7
     `, mySprite, 0, -250)
 }
-function drawLife() {
+function drawLife () {
     i = 0
     for (let value2 of LifeList) {
         value2.setPosition(scene.cameraLeft() + 8, scene.cameraTop() + (8 + i * 16))
         i += 1
     }
 }
-function nop(num: number) {
-
+function nop (num: number) {
+	
 }
 sprites.onDestroyed(SpriteKind.Player, function (sprite) {
     mySprite = sprites.create(img`
@@ -189,14 +188,14 @@ sprites.onDestroyed(SpriteKind.Player, function (sprite) {
     `, SpriteKind.Player)
     mySprite.setPosition(scene.screenWidth() / 2, scene.screenHeight() * 1.8)
 })
-function drawBomb() {
+function drawBomb () {
     i = 0
     for (let value of BombList) {
         value.setPosition(scene.cameraLeft() + 24, scene.cameraTop() + (8 + i * 16))
         i += 1
     }
 }
-function buttonB() {
+function buttonB () {
     if (controller.B.isPressed()) {
         BButton += 1
     } else if (BButton != 0) {
@@ -204,10 +203,6 @@ function buttonB() {
         BButton = 0
     }
 }
-sprites.onOverlap(SpriteKind.Enemy, SpriteKind.BombEffect2, function (sprite: Sprite, otherSprite: Sprite) {
-    sprite.destroy(effects.warmRadial, 500)
-    info.changeScoreBy(10)
-})
 sprites.onOverlap(SpriteKind.Enemy, SpriteKind.Player, function (sprite, otherSprite) {
     sprite.destroy()
     otherSprite.destroy(effects.fountain, 1000)
@@ -221,12 +216,16 @@ sprites.onCreated(SpriteKind.BombEffect2, function (sprite) {
     sprite.setPosition(mySprite.x, mySprite.y)
     sprite.lifespan = 1000
 })
+sprites.onOverlap(SpriteKind.Enemy, SpriteKind.BombEffect2, function (sprite: Sprite, otherSprite: Sprite) {
+    sprite.destroy(effects.warmRadial, 500)
+    info.changeScoreBy(10)
+})
 sprites.onOverlap(SpriteKind.Enemy, SpriteKind.Projectile, function (sprite, otherSprite) {
     otherSprite.destroy()
     let eLife: number = sprite.data
-    eLife -= 1
+eLife += 0 - 1
     sprite.data = eLife
-    info.changeScoreBy(1)
+info.changeScoreBy(1)
     if (eLife <= 0) {
         sprite.destroy(effects.warmRadial, 500)
         info.changeScoreBy(8)
@@ -237,7 +236,7 @@ sprites.onOverlap(SpriteKind.Enemy, SpriteKind.Projectile, function (sprite, oth
             Item.setPosition(sprite.x, sprite.y)
             Item.vy = 10
             Item.data = Math.randomRange(1, 3)
-            switch (Item.data as number) {
+switch (Item.data as number) {
                 case 1:
                     Item.setImage(LifeOrb)
                     break;
@@ -271,10 +270,10 @@ sprites.onOverlap(SpriteKind.Enemy, SpriteKind.Projectile, function (sprite, oth
 scene.onHitWall(SpriteKind.Enemy, function (sprite) {
     sprite.destroy()
 })
-function fireBombWithPower(power2: number) {
+function fireBombWithPower (power2: number) {
     if (BombList.length > 0) {
         if (power2 < 50) {
-
+        	
         } else if (power2 < 100) {
             BombEffect = sprites.create(img`
                 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
@@ -414,7 +413,7 @@ function fireBombWithPower(power2: number) {
         }
     }
 }
-function buttonA() {
+function buttonA () {
     if (controller.A.isPressed()) {
         AButton += 1
     } else {
@@ -426,8 +425,12 @@ function buttonA() {
 }
 sprites.onOverlap(SpriteKind.Enemy, SpriteKind.BombEffect2, function (sprite, otherSprite) {
     sprite.destroy(effects.warmRadial, 500)
+    info.changeScoreBy(10)
 })
-function deleteBombOrb(mySprite: Sprite) {
+info.onCountdownEnd(function () {
+    game.over(true, effects.starField)
+})
+function deleteBombOrb (mySprite: Sprite) {
     mySprite.destroy()
 }
 sprites.onOverlap(SpriteKind.Items, SpriteKind.Player, function (sprite, otherSprite) {
@@ -444,18 +447,18 @@ sprites.onOverlap(SpriteKind.Items, SpriteKind.Player, function (sprite, otherSp
             info.changeScoreBy(15)
             break;
     }
-    sprite.destroy()
+sprite.destroy()
 })
 let BombEffect: Sprite = null
 let BButton = 0
 let i = 0
 let projectile2: Sprite = null
-let Item: Sprite = null
 let AButton = 0
 let mySprite: Sprite = null
-let BombList: Sprite[] = []
-let LifeList: Sprite[] = []
 let myEnemy: Sprite = null
+let LifeList: Sprite[] = []
+let BombList: Sprite[] = []
+let Item: Sprite = null
 let BomOrb = img`
     . . . . . . . . . . . . . . . .
     . . . . . . 6 6 6 6 . . . . . .
@@ -474,7 +477,7 @@ let BomOrb = img`
     . . . . . . 6 6 6 6 . . . . . .
     . . . . . . . . . . . . . . . .
 `
-let LifeOrb: Image = img`
+let LifeOrb = img`
     . . . . . . . . . . . . . . . .
     . . . . . . 4 4 4 4 . . . . . .
     . . . . 4 4 4 5 5 4 4 4 . . . .
@@ -493,6 +496,7 @@ let LifeOrb: Image = img`
     . . . . . . . . . . . . . . . .
 `
 info.setScore(0)
+info.startCountdown(120)
 mySprite = sprites.create(img`
     . . . . . . . . . . . . . . . .
     . . . . . . . . . . . . . . . .
@@ -513,28 +517,28 @@ mySprite = sprites.create(img`
 `, SpriteKind.Player)
 mySprite.setPosition(scene.screenWidth() / 2, scene.screenHeight() * 1.8)
 tiles.setTilemap(tiles.createTilemap(
-    hex`1000100006060101010101010606000000000000060603010101020506060000000000000606010105010101060600000000000006060401010101010606000000000000060601010103010106060000000000000606010101010101060600000000000006060104010103010606000000000000060603010102010106060000000000000606040101010501060600000000000006060101010101010606000000000000060601010102010106060000000000000606010201010101060600000000000006060501010101010606000000000000060601010101030106060000000000000606010101030101060600000000000006060501010101050606000000000000`,
-    img`
-        2 2 . . . . . . 2 2 . . . . . .
-        2 2 . . . . . . 2 2 . . . . . .
-        2 2 . . . . . . 2 2 . . . . . .
-        2 2 . . . . . . 2 2 . . . . . .
-        2 2 . . . . . . 2 2 . . . . . .
-        2 2 . . . . . . 2 2 . . . . . .
-        2 2 . . . . . . 2 2 . . . . . .
-        2 2 . . . . . . 2 2 . . . . . .
-        2 2 . . . . . . 2 2 . . . . . .
-        2 2 . . . . . . 2 2 . . . . . .
-        2 2 . . . . . . 2 2 . . . . . .
-        2 2 . . . . . . 2 2 . . . . . .
-        2 2 . . . . . . 2 2 . . . . . .
-        2 2 . . . . . . 2 2 . . . . . .
-        2 2 . . . . . . 2 2 . . . . . .
-        2 2 2 2 2 2 2 2 2 2 . . . . . .
-    `,
-    [myTiles.tile0, myTiles.tile1, myTiles.tile2, myTiles.tile3, myTiles.tile4, myTiles.tile5, myTiles.tile6],
-    TileScale.Sixteen
-))
+            hex`1000100006060101010101010606000000000000060603010101020506060000000000000606010105010101060600000000000006060401010101010606000000000000060601010103010106060000000000000606010101010101060600000000000006060104010103010606000000000000060603010102010106060000000000000606040101010501060600000000000006060101010101010606000000000000060601010102010106060000000000000606010201010101060600000000000006060501010101010606000000000000060601010101030106060000000000000606010101030101060600000000000006060501010101050606000000000000`,
+            img`
+                2 2 . . . . . . 2 2 . . . . . .
+                2 2 . . . . . . 2 2 . . . . . .
+                2 2 . . . . . . 2 2 . . . . . .
+                2 2 . . . . . . 2 2 . . . . . .
+                2 2 . . . . . . 2 2 . . . . . .
+                2 2 . . . . . . 2 2 . . . . . .
+                2 2 . . . . . . 2 2 . . . . . .
+                2 2 . . . . . . 2 2 . . . . . .
+                2 2 . . . . . . 2 2 . . . . . .
+                2 2 . . . . . . 2 2 . . . . . .
+                2 2 . . . . . . 2 2 . . . . . .
+                2 2 . . . . . . 2 2 . . . . . .
+                2 2 . . . . . . 2 2 . . . . . .
+                2 2 . . . . . . 2 2 . . . . . .
+                2 2 . . . . . . 2 2 . . . . . .
+                2 2 2 2 2 2 2 2 2 2 . . . . . .
+            `,
+            [myTiles.tile0,myTiles.tile1,myTiles.tile2,myTiles.tile3,myTiles.tile4,myTiles.tile5,myTiles.tile6],
+            TileScale.Sixteen
+        ))
 sprites.create(LifeOrb, SpriteKind.Life)
 sprites.create(LifeOrb, SpriteKind.Life)
 sprites.create(LifeOrb, SpriteKind.Life)
