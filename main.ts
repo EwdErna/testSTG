@@ -221,22 +221,6 @@ sprites.onCreated(SpriteKind.BombEffect2, function (sprite) {
     sprite.setPosition(mySprite.x, mySprite.y)
     sprite.lifespan = 1000
 })
-sprites.onOverlap(SpriteKind.Items, SpriteKind.Player, function (sprite: Sprite, otherSprite: Sprite) {
-    switch (sprite.data as number) {
-        case 0://ライフ回復
-            sprites.create(LifeOrb, SpriteKind.Life)
-            LifeList = sprites.allOfKind(SpriteKind.Life)
-            break;
-        case 1://ボム増加
-            sprites.create(BomOrb, SpriteKind.Bomb)
-            BombList = sprites.allOfKind(SpriteKind.Bomb)
-            break;
-        case 2://得点加算
-            info.changeScoreBy(15)
-            break;
-    }
-    sprite.destroy()
-})
 sprites.onOverlap(SpriteKind.Enemy, SpriteKind.Projectile, function (sprite, otherSprite) {
     otherSprite.destroy()
     let eLife: number = sprite.data
@@ -252,15 +236,15 @@ sprites.onOverlap(SpriteKind.Enemy, SpriteKind.Projectile, function (sprite, oth
             `, SpriteKind.Items)
             Item.setPosition(sprite.x, sprite.y)
             Item.vy = 10
-            Item.data = Math.randomRange(0, 2)
+            Item.data = Math.randomRange(1, 3)
             switch (Item.data as number) {
-                case 0:
+                case 1:
                     Item.setImage(LifeOrb)
                     break;
-                case 1:
+                case 2:
                     Item.setImage(BomOrb)
                     break;
-                case 2:
+                case 3:
                     Item.setImage(img`
                         . . . . . . . . . . . . . . . .
                         . . . . . . a a a a . . . . . .
@@ -448,15 +432,15 @@ function deleteBombOrb(mySprite: Sprite) {
 }
 sprites.onOverlap(SpriteKind.Items, SpriteKind.Player, function (sprite, otherSprite) {
     switch (sprite.data as number) {
-        case 0://ライフ回復
+        case 1://ライフ回復
             sprites.create(LifeOrb, SpriteKind.Life)
             LifeList = sprites.allOfKind(SpriteKind.Life)
             break;
-        case 1://ボム増加
+        case 2://ボム増加
             sprites.create(BomOrb, SpriteKind.Bomb)
             BombList = sprites.allOfKind(SpriteKind.Bomb)
             break;
-        case 2://得点加算
+        case 3://得点加算
             info.changeScoreBy(15)
             break;
     }
